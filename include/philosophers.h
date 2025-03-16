@@ -20,16 +20,15 @@
 #define EATING 6
 #define SLEEPING 7
 #define THINKING 8
-#define DEAD 9
+#define DEAD -1
 
 typedef struct s_philos
 {
 	int					id;
 	int					last_meal;
-	int					meals_had;
-	int					is_alive;
-	pthread_mutex_t		lock;
-	pthread_mutex_t		right_fork;
+	pthread_mutex_t		*meals_had;
+	pthread_mutex_t		*is_alive;
+	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		*left_fork;
 	const struct s_data	*data;
 }				t_philos;
@@ -38,7 +37,7 @@ typedef struct s_table
 {
 	t_philos			*philos;
 	pthread_mutex_t		*forks;
-	pthread_mutex_t		death_flag;
+	pthread_mutex_t		*death_flag;
 	pthread_mutex_t		finished_eating;
 	const struct s_data	*data;
 }				t_table;
@@ -63,7 +62,6 @@ typedef struct s_root
 void	execute_cmd(t_data *data, char **envp);
 int		argc_check(int argc);
 void	check_in_file(t_data *data, int fdin);
-int		philo_check(t_philos *philo);
 int		get_time(void);
 
 //				INIT FUNCS
@@ -76,6 +74,7 @@ int	monitoring(t_table *table);
 int	check_if_meal_is_done(t_table *table);
 int	look_for_dead_philos(t_table *table);
 int	philo_check(t_philos *philo);
+int	is_philosopher_dead(t_philos *philo);
 
 // =============== ROUTINE =================
 

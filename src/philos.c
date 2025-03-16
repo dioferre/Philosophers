@@ -18,14 +18,14 @@ void	routine(t_philos *philo, t_table *table)
 		ft_usleep(1);
 	while (TRUE)
 	{
-		eat(philo);
-		if (&philo->meals_had == philo->data->nr_meals)
+		if (is_philosopher_dead(philo))
 		{
-			pthread_mutex_lock(&philo->lock);
-			philo->is_alive = FALSE;
-			pthread_mutex_unlock(&philo->lock);
+			write_state(philo, DEAD);
 			break;
 		}
+		eat(philo);
+		if (philo->meals_had == philo->data->nr_meals)
+			break;
 		sleep_and_think(philo);
 	}
 }
@@ -33,23 +33,19 @@ void	routine(t_philos *philo, t_table *table)
 void	eat(t_philos *philo)
 {
 	pthread_mutex_lock(&philo->right_fork);
-	write_state(philo, FORK_TAKEN);
+	write_state(philo, FORK_TAKEN); 
 	pthread_mutex_lock(&philo->left_fork);
 	write_state(philo, FORK_TAKEN);
-	pthread_mutex_lock(&philo->lock);
 	write_state(philo, EATING);
 	philo->meals_had++;
 	ft_usleep(philo->data->time2eat);
 	pthread_mutex_unlock(&philo->right_fork);
 	pthread_mutex_unlock(&philo->left_fork);
-	pthread_mutex_unlock(&philo->lock);
 }
 
 void	sleep_and_think(t_philos *philo)
 {
-	pthread_mutex_lock(&philo->lock);
 	write_state(philo, SLEEPING);
 	ft_usleep(philo->data->time2sleep);
 	write_state(philo, THINKING);
-	pthread_mutex_unlock(&philo->lock);
 }

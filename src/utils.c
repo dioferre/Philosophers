@@ -56,7 +56,7 @@ thinking, dead. */
 void	write_state(t_philos *philo, int state)
 {
 	//MUTEX LOCK
-	printf("%d Philosopher %d ", get_time(), philo->id);
+	printf("|%d| Philosopher nr%d ", get_time(), philo->id);
 	if (state == FORK_TAKEN)
 		printf("has taken a fork.\n");
 	else if (state == EATING)

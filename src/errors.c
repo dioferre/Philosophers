@@ -21,7 +21,7 @@ void	kill_program(t_root *root)
 
 /* Checks if a string has ONLY digits,
 returns 0 if not, 1 if yes */
-bool	digit_check(char *str)
+int	digit_check(char *str)
 {
 	int	i;
 
