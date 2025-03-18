@@ -34,23 +34,35 @@ t_data	*init_data(int argc, char **argv)
 	return (data);
 }
 
+void	create_philo(t_data *data, t_philos *philo, int i)
+{
+	philo[i].data = data;
+	philo[i].id = i;
+	pthread_mutex_init(&philo[i].is_alive, NULL);
+	pthread_mutex_init(&philo[i].meals_had, NULL);
+	philo[i].is_alive = TRUE;
+	philo[i].last_meal = 0;
+	philo[i].meals_had = 0;
+	philo[i].left_fork = NULL;
+	philo[i].right_fork = NULL;
+}
+
 t_table	*init_table(t_data *data, char **argv)
 {
 	pthread_mutex_t	forks[data->nr_philos];
-	t_philos		philos[data->nr_philos];
+	t_philos		philos[data->nr_philos]; 
 	t_table			*table;
 	int	i;
 
 	i = 0;
-	while (i < data->nr_philos)
+	while (i++ < data->nr_philos)
+		pthread_mutex_init(&forks[i], NULL);
+	i = 0;
+	while (i < data->nr_philos) // need to plan this out better lololol
 	{
-		philos[i].data = data;
-		philos[i].id = i;
-		philos[i].is_alive = TRUE;
-		philos[i].last_meal = 0;
-		philos[i].meals_had = 0;
-		philos[i].left_fork = forks[];
-		philos[i].right_fork = forks[];
+		create_philo(data, &philos[i], i);
+		// link both forks
+		i++;
 	}
 	table = malloc(sizeof(t_table));
 	table->forks = &forks;
