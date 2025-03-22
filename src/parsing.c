@@ -38,6 +38,7 @@ int	ft_strlen(char *str)
 
 int	check_parsing(t_root *root, int argc, char **argv)
 {
+	(void) root;
 	int	i;
 
 	i = 0;
@@ -50,7 +51,7 @@ int	check_parsing(t_root *root, int argc, char **argv)
 		else if(!digit_check(argv[i]))
 			return (-3);
 		else if (ft_strlen(argv[i]) > 10
-				|| (ft_strlen(argv[i]) == 10) && (ft_strncmp(argv[i], "2147483647", 10) > 0))
+				|| ((ft_strlen(argv[i]) == 10) && (ft_strncmp(argv[i], "2147483647", 10) > 0)))
 			return (-4);
 	}
 	return (0);

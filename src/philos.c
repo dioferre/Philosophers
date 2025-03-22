@@ -14,6 +14,7 @@
 
 void	routine(t_philos *philo, t_table *table)
 {
+	(void) table;
 	if (philo->id % 2 == 0)
 		ft_usleep(1);
 	while (TRUE)
@@ -32,15 +33,15 @@ void	routine(t_philos *philo, t_table *table)
 
 void	eat(t_philos *philo)
 {
-	pthread_mutex_lock(&philo->right_fork);
-	write_state(philo, FORK_TAKEN); 
 	pthread_mutex_lock(&philo->left_fork);
+	write_state(philo, FORK_TAKEN); 
+	pthread_mutex_lock(philo->right_fork);
 	write_state(philo, FORK_TAKEN);
 	write_state(philo, EATING);
 	philo->meals_had++;
 	ft_usleep(philo->data->time2eat);
-	pthread_mutex_unlock(&philo->right_fork);
 	pthread_mutex_unlock(&philo->left_fork);
+	pthread_mutex_unlock(philo->right_fork);
 }
 
 void	sleep_and_think(t_philos *philo)

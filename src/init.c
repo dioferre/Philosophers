@@ -36,15 +36,13 @@ t_data	*init_data(int argc, char **argv)
 
 void	create_philo(t_data *data, t_philos *philo, int i)
 {
-	philo[i].data = data;
-	philo[i].id = i;
-	pthread_mutex_init(&philo[i].is_alive, NULL);
-	pthread_mutex_init(&philo[i].meals_had, NULL);
-	philo[i].is_alive = TRUE;
-	philo[i].last_meal = 0;
-	philo[i].meals_had = 0;
-	philo[i].left_fork = NULL;
-	philo[i].right_fork = NULL;
+	philo->data = data;
+	philo->id = i;
+	pthread_mutex_init(philo->is_alive, NULL);
+	philo->is_alive = TRUE; // not the correct way to use mutex.
+	philo->last_meal = 0;
+	philo->meals_had = 0;
+	philo->right_fork = NULL;
 }
 
 t_table	*init_table(t_data *data, char **argv)
@@ -60,7 +58,12 @@ t_table	*init_table(t_data *data, char **argv)
 	i = 0;
 	while (i < data->nr_philos) // need to plan this out better lololol
 	{
+		philos[i].left_fork = forks[i];
 		create_philo(data, &philos[i], i);
+		if (i - 1 < 0)
+			philos[i].right_fork = &forks[data->nr_philos];
+		else
+			philos[i].right_fork = &forks[i - 1];
 		// link both forks
 		i++;
 	}

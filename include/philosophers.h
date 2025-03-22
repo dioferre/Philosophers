@@ -26,10 +26,10 @@ typedef struct s_philos
 {
 	int					id;
 	int					last_meal;
-	pthread_mutex_t		*meals_had;
+	int					meals_had;
 	pthread_mutex_t		*is_alive;
+	pthread_mutex_t		left_fork;
 	pthread_mutex_t		*right_fork;
-	pthread_mutex_t		*left_fork;
 	const struct s_data	*data;
 }				t_philos;
 
@@ -84,11 +84,18 @@ void	sleep_and_think(t_philos *philo);
 
 //				UTIL FUNCS
 
+
+t_data	*init_data(int argc, char **argv);
+t_table	*init_table(t_data *data, char **argv);
+void	create_philo(t_data *data, t_philos *philo, int i);
+void	kill_root(t_root *root);
+
 void	ft_usleep(int milliseconds);
 void	write_state(t_philos *philo, int state);
 int		ft_strcmp(char *s1, char *s2);
-int		atoi(char *str);
+int		ft_atoi(char *str);
 int		digit_check(char *str);
+void	kill_root(t_root *root);
 
 //				PARSING
 int	check_parsing(t_root *root, int argc, char **argv);

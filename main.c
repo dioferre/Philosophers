@@ -20,5 +20,5 @@ int	main(int argc, char **argv)
 	if (check_parsing(root, argc, argv) == -1);
 		return(free(root), -1); //TO DO: Clean up
 	setup_root(&root, argc, argv);
-
+	kill_root(&root);
 }

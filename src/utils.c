@@ -34,7 +34,7 @@ void	ft_usleep(int milliseconds)
 /* Simple atoi, doesnt handle negatives
 since it does not need to,
 don't even try it */
-int	atoi(char *str)
+int	ft_atoi(char *str)
 {
 	int	i;
 	int result;
