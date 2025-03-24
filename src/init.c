@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:10:44 by dioferre          #+#    #+#             */
-/*   Updated: 2025/01/28 10:21:41 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/24 12:01:03 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,37 +36,36 @@ t_data	*init_data(int argc, char **argv)
 	return (data);
 }
 
-void	create_philo(t_data *data, t_philos *philo, int i)
+void	create_philo(t_data *data, t_philos *philo,
+			pthread_mutex_t *forks, int i)
 {
 	philo->data = data;
 	philo->id = i;
 	philo->status = ALIVE;
 	philo->last_meal = 0;
 	philo->meals_had = 0;
-	philo->right_fork = NULL;
+	philo->left_fork = &forks[i];
+	if (i - 1 < 0)
+		philo->right_fork = &forks[data->nr_philos - 1];
+	else
+		philo->right_fork = &forks[i - 1];
 }
 
 t_table	*init_table(t_data *data)
 {
-	pthread_mutex_t	forks[data->nr_philos];
-	t_philos		philos[data->nr_philos]; 
+	pthread_mutex_t	*forks;
+	t_philos		*philos;
 	t_table			*table;
-	int	i;
+	int				i;
 
-	i = 0;
-	while (i++ < data->nr_philos - 1)
+	forks = malloc(data->nr_philos * (sizeof(pthread_mutex_t)));
+	philos = malloc(data->nr_philos * (sizeof(t_philos)));
+	i = -1;
+	while (++i < data->nr_philos)
 		pthread_mutex_init(&forks[i], NULL);
-	i = 0;
-	while (i < data->nr_philos)
-	{
-		philos[i].left_fork = forks[i];
-		create_philo(data, &philos[i], i);
-		if (i - 1 < 0)
-			philos[i].right_fork = &forks[data->nr_philos];
-		else
-			philos[i].right_fork = &forks[i - 1];
-		i++;
-	}
+	i = -1;
+	while (++i < data->nr_philos)
+		create_philo(data, &philos[i], forks, i);
 	table = malloc(sizeof(t_table));
 	table->forks = forks;
 	table->data = data;
@@ -84,9 +83,11 @@ void	kill_root(t_root *root)
 	pthread_mutex_destroy(root->table->death_flag);
 	while (i < root->data->nr_philos)
 	{
-		pthread_mutex_destroy(&root->table->philos[i].left_fork);
+		pthread_mutex_destroy(root->table->philos[i].left_fork);
 		i++;
 	}
+	free(root->table->forks);
+	free(root->table->philos);
 	free(root->table->death_flag);
 	free(root->table);
 	free(root->data);

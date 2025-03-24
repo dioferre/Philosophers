@@ -32,7 +32,7 @@ typedef struct s_philos
 	int					last_meal;
 	int					meals_had;
 	int					status;
-	pthread_mutex_t		left_fork;
+	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
 	const struct s_data	*data;
 }				t_philos;
@@ -91,7 +91,7 @@ void	sleep_and_think(t_philos *philo);
 
 t_data	*init_data(int argc, char **argv);
 t_table	*init_table(t_data *data);
-void	create_philo(t_data *data, t_philos *philo, int i);
+void	create_philo(t_data *data, t_philos *philo, pthread_mutex_t *forks, int i);
 void	kill_root(t_root *root);
 
 void	ft_usleep(int milliseconds);
