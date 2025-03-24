@@ -10,8 +10,12 @@
 
 // Defines
 
-#define TRUE 1
 #define FALSE 0
+#define TRUE 1
+
+#define DEAD 0
+#define ALIVE 1
+
 #define MAX_PHILOS 200
 
 /* ===== Philosopher State Flags ===== */
@@ -20,14 +24,14 @@
 #define EATING 6
 #define SLEEPING 7
 #define THINKING 8
-#define DEAD -1
+
 
 typedef struct s_philos
 {
 	int					id;
 	int					last_meal;
 	int					meals_had;
-	pthread_mutex_t		*is_alive;
+	int					status;
 	pthread_mutex_t		left_fork;
 	pthread_mutex_t		*right_fork;
 	const struct s_data	*data;
@@ -86,14 +90,14 @@ void	sleep_and_think(t_philos *philo);
 
 
 t_data	*init_data(int argc, char **argv);
-t_table	*init_table(t_data *data, char **argv);
+t_table	*init_table(t_data *data);
 void	create_philo(t_data *data, t_philos *philo, int i);
 void	kill_root(t_root *root);
 
 void	ft_usleep(int milliseconds);
 void	write_state(t_philos *philo, int state);
 int		ft_strcmp(char *s1, char *s2);
-int		ft_atoi(char *str);
+int		ft_itoa(char *str);
 int		digit_check(char *str);
 void	kill_root(t_root *root);
 

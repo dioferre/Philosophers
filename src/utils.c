@@ -17,7 +17,7 @@ int	get_time(void)
 {
 	struct timeval	time;
 
-	if (gettimeofday(&time, NULL) == -1);
+	if (gettimeofday(&time, NULL) == -1)
 		return (-1);
 	return(time.tv_sec / 1000 + time.tv_usec * 1000);
 }
@@ -34,7 +34,7 @@ void	ft_usleep(int milliseconds)
 /* Simple atoi, doesnt handle negatives
 since it does not need to,
 don't even try it */
-int	ft_atoi(char *str)
+int	ft_itoa(char *str)
 {
 	int	i;
 	int result;
@@ -44,7 +44,7 @@ int	ft_atoi(char *str)
 	while (str[i])
 	{
 		result *= 10;
-		result += str[i] + '0';
+		result += str[i] - '0';
 		i++;
 	}
 	return (result);

@@ -22,8 +22,8 @@ OBJ_DIR = obj/
 # FILES
 MAIN_FILE = main.c
 
-SRC_FILES := src/philos.c src/errors.c src/parsing.c src/init.c \
-			src/utils.c src/monitor.c 
+SRC_FILES := src/errors.c src/parsing.c src/init.c \
+			src/utils.c
 
 OBJ_FILES := $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRC_FILES))
 
