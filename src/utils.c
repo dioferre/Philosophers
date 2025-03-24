@@ -6,25 +6,25 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:37:09 by dioferre          #+#    #+#             */
-/*   Updated: 2025/01/28 13:06:48 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/24 15:43:31 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
 /* Returns the current time of day in milliseconds. */
-int	get_time(void)
+size_t	get_time(void)
 {
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
-		return (-1);
-	return(time.tv_sec / 1000 + time.tv_usec * 1000);
+		return (printf("LOLOLOL\n") ,-1);
+	return(time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-void	ft_usleep(int milliseconds)
+void	ft_usleep(size_t milliseconds)
 {
-	int start;
+	size_t start;
 
 	start = get_time();
 	while (get_time() - start < milliseconds)
@@ -56,7 +56,7 @@ thinking, dead. */
 void	write_state(t_philos *philo, int state)
 {
 	//MUTEX LOCK
-	printf("|%d| Philosopher nr%d ", get_time(), philo->id);
+	printf("|%zi| Philosopher nr %d ", get_time(), philo->id);
 	if (state == FORK_TAKEN)
 		printf("has taken a fork.\n");
 	else if (state == EATING)

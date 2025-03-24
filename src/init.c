@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:10:44 by dioferre          #+#    #+#             */
-/*   Updated: 2025/03/24 12:01:03 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/24 16:00:39 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,19 @@ t_data	*init_data(int argc, char **argv)
 	return (data);
 }
 
-void	create_philo(t_data *data, t_philos *philo,
+void	create_philo(t_table *table, t_philos *philo,
 			pthread_mutex_t *forks, int i)
 {
-	philo->data = data;
+	philo->data = table->data;
 	philo->id = i;
 	philo->status = ALIVE;
 	philo->last_meal = 0;
 	philo->meals_had = 0;
+	philo->start_time = 0;
 	philo->left_fork = &forks[i];
+	philo->printex = table->printex;
 	if (i - 1 < 0)
-		philo->right_fork = &forks[data->nr_philos - 1];
+		philo->right_fork = &forks[table->data->nr_philos - 1];
 	else
 		philo->right_fork = &forks[i - 1];
 }
@@ -60,18 +62,20 @@ t_table	*init_table(t_data *data)
 
 	forks = malloc(data->nr_philos * (sizeof(pthread_mutex_t)));
 	philos = malloc(data->nr_philos * (sizeof(t_philos)));
+	table = malloc(sizeof(t_table));
+	table->printex = malloc(sizeof(pthread_mutex_t));
+	table->data = data;
 	i = -1;
 	while (++i < data->nr_philos)
 		pthread_mutex_init(&forks[i], NULL);
 	i = -1;
 	while (++i < data->nr_philos)
-		create_philo(data, &philos[i], forks, i);
-	table = malloc(sizeof(t_table));
+		create_philo(table, &philos[i], forks, i);
 	table->forks = forks;
-	table->data = data;
 	table->philos = philos;
 	table->death_flag = malloc(sizeof(pthread_mutex_t));
 	pthread_mutex_init(table->death_flag, NULL);
+	pthread_mutex_init(table->printex, NULL);
 	return (table);
 }
 
@@ -81,6 +85,7 @@ void	kill_root(t_root *root)
 
 	i = 0;
 	pthread_mutex_destroy(root->table->death_flag);
+	pthread_mutex_destroy(root->table->printex);
 	while (i < root->data->nr_philos)
 	{
 		pthread_mutex_destroy(root->table->philos[i].left_fork);
@@ -88,6 +93,7 @@ void	kill_root(t_root *root)
 	}
 	free(root->table->forks);
 	free(root->table->philos);
+	free(root->table->printex);
 	free(root->table->death_flag);
 	free(root->table);
 	free(root->data);

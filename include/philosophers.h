@@ -32,6 +32,9 @@ typedef struct s_philos
 	int					last_meal;
 	int					meals_had;
 	int					status;
+	size_t				start_time;
+	pthread_t			thread;
+	pthread_mutex_t		*printex;
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
 	const struct s_data	*data;
@@ -40,6 +43,8 @@ typedef struct s_philos
 typedef struct s_table
 {
 	t_philos			*philos;
+	pthread_t			thread;
+	pthread_mutex_t		*printex;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		*death_flag;
 	pthread_mutex_t		finished_eating;
@@ -66,7 +71,8 @@ typedef struct s_root
 void	execute_cmd(t_data *data, char **envp);
 int		argc_check(int argc);
 void	check_in_file(t_data *data, int fdin);
-int		get_time(void);
+int		start_meal(t_table *table, t_philos *philos);
+size_t		get_time(void);
 
 //				INIT FUNCS
 
@@ -91,10 +97,10 @@ void	sleep_and_think(t_philos *philo);
 
 t_data	*init_data(int argc, char **argv);
 t_table	*init_table(t_data *data);
-void	create_philo(t_data *data, t_philos *philo, pthread_mutex_t *forks, int i);
+void	create_philo(t_table *table, t_philos *philo, pthread_mutex_t *forks, int i);
 void	kill_root(t_root *root);
 
-void	ft_usleep(int milliseconds);
+void	ft_usleep(size_t milliseconds);
 void	write_state(t_philos *philo, int state);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_itoa(char *str);
