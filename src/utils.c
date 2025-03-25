@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:37:09 by dioferre          #+#    #+#             */
-/*   Updated: 2025/03/24 15:43:31 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/25 20:14:22 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,9 @@ args: fork taken, eating, sleeping,
 thinking, dead. */
 void	write_state(t_philos *philo, int state)
 {
-	//MUTEX LOCK
-	printf("|%zi| Philosopher nr %d ", get_time(), philo->id);
+	pthread_mutex_lock(philo->table->printex);
+	pthread_mutex_lock(philo->table->death_flag);
+	printf("|%zi| Philosopher nr %d ", get_time() - philo->table->start_time, philo->id);
 	if (state == FORK_TAKEN)
 		printf("has taken a fork.\n");
 	else if (state == EATING)
@@ -67,5 +68,6 @@ void	write_state(t_philos *philo, int state)
 		printf("is thinking.\n");
 	else if (state == DEAD)
 		printf("died.\n");
-	//MUTEX UNLOCK
+	pthread_mutex_unlock(philo->table->printex);
+	pthread_mutex_unlock(philo->table->death_flag);
 }

@@ -29,19 +29,21 @@
 typedef struct s_philos
 {
 	int					id;
-	int					last_meal;
 	int					meals_had;
 	int					status;
 	size_t				start_time;
+	size_t				last_meal;
 	pthread_t			thread;
-	pthread_mutex_t		*printex;
+	pthread_mutex_t		*statustex;
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
 	const struct s_data	*data;
+	const struct s_table	*table;
 }				t_philos;
 
 typedef struct s_table
 {
+	size_t				start_time;
 	t_philos			*philos;
 	pthread_t			thread;
 	pthread_mutex_t		*printex;
@@ -80,7 +82,7 @@ void	setup_root(t_root **root, int argc, char **argv);
 
 // ============= MONITORING ===============
 
-int	monitoring(t_table *table);
+void	*monitoring(void *arg);
 int	check_if_meal_is_done(t_table *table);
 int	look_for_dead_philos(t_table *table);
 int	philo_check(t_philos *philo);
@@ -88,8 +90,8 @@ int	is_philosopher_dead(t_philos *philo);
 
 // =============== ROUTINE =================
 
-void	routine(t_philos *philo, t_table *table);
-void	eat(t_philos *philo);
+void	*routine(void *arg);
+int	eat(t_philos *philo);
 void	sleep_and_think(t_philos *philo);
 
 //				UTIL FUNCS
