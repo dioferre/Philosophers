@@ -1,5 +1,5 @@
 CC = cc
-NAME = philos
+NAME = philo
 
 #FLAGS
 CFLAGS = -g -Wall -Wextra -Werror -I$(INC_DIR)
@@ -23,7 +23,7 @@ OBJ_DIR = obj/
 MAIN_FILE = main.c
 
 SRC_FILES := src/errors.c src/parsing.c src/init.c \
-			src/utils.c src/utils2.c src/meal.c src/philos.c
+			src/utils.c src/utils2.c src/meal.c src/routine.c
 
 OBJ_FILES := $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRC_FILES))
 

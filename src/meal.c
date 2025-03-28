@@ -6,20 +6,11 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 15:09:46 by dioferre          #+#    #+#             */
-/*   Updated: 2025/03/28 09:45:01 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/28 13:02:22 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-
-void	*ola_function(void *arg)
-{
-	t_philos	*philo;
-
-	philo = (t_philos *)arg;
-	printf("|%zi| Philosopher id %d says 'ola!'\n", get_time() - philo->table->start_time, philo->id);
-	return (arg);
-}
 
 int	start_meal(t_table *table, t_philos *philos)
 {

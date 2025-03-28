@@ -33,7 +33,6 @@ typedef struct s_philos
 	size_t					start_time;
 	size_t					last_meal;
 	pthread_t				thread;
-	pthread_mutex_t			*statustex;
 	pthread_mutex_t			*left_fork;
 	pthread_mutex_t			*right_fork;
 	struct s_data		*data;
@@ -101,6 +100,7 @@ t_data	*init_data(int argc, char **argv);
 t_table	*init_table(t_data *data);
 void	create_philo(t_table *table, t_philos *philo, pthread_mutex_t *forks, int i);
 void	kill_root(t_root *root);
+int		check_status(t_philos *philo);
 
 void	pick_up_forks(t_philos *philo);
 void	drop_forks(t_philos *philo);

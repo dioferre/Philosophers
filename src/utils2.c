@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 09:17:14 by dioferre          #+#    #+#             */
-/*   Updated: 2025/03/28 11:06:17 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/28 13:36:11 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,20 @@ void	kill_and_write_state(t_philos *philo)
 		pthread_mutex_unlock(philo->table->death_flag_lock);
 }
 
+int	check_status(t_philos *philo)
+{
+	if (philo->last_meal == 0)
+	{
+		if (get_time() - philo->table->start_time > (size_t) philo->data->time2die)
+			return (kill_and_write_state(philo), DEAD);
+	}
+	else if (get_time() - philo->last_meal > (size_t) philo->data->time2die)
+	{
+		return (kill_and_write_state(philo), DEAD);
+	}
+	return (ALIVE);
+}
+
 int	is_philosopher_dead(t_philos *philo)
 {
 //	print_check_values(philo);
@@ -54,14 +68,32 @@ int	is_philosopher_dead(t_philos *philo)
 
 void	pick_up_forks(t_philos *philo)
 {
-	pthread_mutex_lock(philo->left_fork);
-	write_state(philo, FORK_TAKEN);
-	pthread_mutex_lock(philo->right_fork);
-	write_state(philo, FORK_TAKEN);
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_lock(philo->left_fork);
+		write_state(philo, FORK_TAKEN);
+		pthread_mutex_lock(philo->right_fork);
+		write_state(philo, FORK_TAKEN);
+	}
+	else
+	{
+		pthread_mutex_lock(philo->right_fork);
+		write_state(philo, FORK_TAKEN);
+		pthread_mutex_lock(philo->left_fork);
+		write_state(philo, FORK_TAKEN);
+	}
 }
 
 void	drop_forks(t_philos *philo)
 {
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
+	}
+	else
+	{
+		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
+	}
 }
