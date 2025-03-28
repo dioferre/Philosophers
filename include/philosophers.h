@@ -8,23 +8,24 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-// Defines
+/* ============ |DEFINES| ============ */
 
 #define FALSE 0
 #define TRUE 1
 
-#define DEAD 0
-#define ALIVE 1
-
 #define MAX_PHILOS 200
 
-/* ===== Philosopher State Flags ===== */
+// Philosopher states
 
+#define DEAD 0
+#define ALIVE 1
 #define FORK_TAKEN 5
 #define EATING 6
 #define SLEEPING 7
 #define THINKING 8
 
+
+/* ============ |STRUCTS| ============ */
 
 typedef struct s_philos
 {
@@ -33,23 +34,23 @@ typedef struct s_philos
 	size_t					start_time;
 	size_t					last_meal;
 	pthread_t				thread;
+	pthread_mutex_t			*meal_tex;
 	pthread_mutex_t			*left_fork;
 	pthread_mutex_t			*right_fork;
-	struct s_data		*data;
-	struct s_table	*table;
+	const struct s_data		*data;
+	struct s_table			*table;
 }				t_philos;
 
 typedef struct s_table
 {
-	int					death_flag;
-	size_t				start_time;
-	t_philos			*philos;
-	pthread_t			thread;
-	pthread_mutex_t		*printex;
-	pthread_mutex_t		*forks;
-	pthread_mutex_t		*death_flag_lock;
-	pthread_mutex_t		finished_eating;
-	struct s_data	*data;
+	int						death_flag;
+	size_t					start_time;
+	pthread_t				thread;
+	t_philos				*philos;
+	pthread_mutex_t			*printex;
+	pthread_mutex_t			*forks;
+	pthread_mutex_t			*death_flag_lock;
+	const struct s_data		*data;
 }				t_table;
 
 typedef struct s_data
@@ -67,53 +68,52 @@ typedef struct s_root
 	t_table	*table;
 }				t_root;
 
-//				FUNCTIONS
+/* ============= |FUNCTIONS| ============= */
 
-void	execute_cmd(t_data *data, char **envp);
-int		argc_check(int argc);
-void	check_in_file(t_data *data, int fdin);
-int		start_meal(t_table *table, t_philos *philos);
-size_t		get_time(void);
 
-//				INIT FUNCS
+// ============== SETUP =================
 
-void	setup_root(t_root **root, int argc, char **argv);
+int			check_parsing(int argc, char **argv);
+
+void		setup_root(t_root **root, int argc, char **argv);
+void		create_philo(t_table *table, t_philos *philo,
+				pthread_mutex_t *forks, int i);
+
+t_data		*init_data(int argc, char **argv);
+t_table		*init_table(t_data *data);
+
+
+// ============== ROUTINE =================
+
+int			start_meal(t_table *table, t_philos *philos);
+
+int			eat(t_philos *philo);
+int			philo_sleep(t_philos *philo);
+void		*routine(void *arg);
+
 
 // ============= MONITORING ===============
 
-void	*monitoring(void *arg);
-int	check_if_meal_is_done(t_table *table);
-int	look_for_dead_philos(t_table *table);
-int	philo_check(t_philos *philo);
-int	is_philosopher_dead(t_philos *philo);
-
-// =============== ROUTINE =================
-
-void	*routine(void *arg);
-int		eat(t_philos *philo);
-int		sleep_and_think(t_philos *philo);
-
-//				UTIL FUNCS
+void		*monitor(void *arg);
+int			check_death_flag(t_philos *philo);
+int			get_status(t_philos *philo);
+void		kill_and_write_state(t_philos *philo);
 
 
-t_data	*init_data(int argc, char **argv);
-t_table	*init_table(t_data *data);
-void	create_philo(t_table *table, t_philos *philo, pthread_mutex_t *forks, int i);
-void	kill_root(t_root *root);
-int		check_status(t_philos *philo);
+// ============== UTILS =================
 
-void	pick_up_forks(t_philos *philo);
-void	drop_forks(t_philos *philo);
+size_t		get_time(void);
+void		ft_usleep(size_t milliseconds);
 
+int			ft_strcmp(char *s1, char *s2);
+int			ft_itoa(char *str);
+int			digit_check(char *str);
 
-void	ft_usleep(size_t milliseconds);
-void	write_state(t_philos *philo, int state);
-int		ft_strcmp(char *s1, char *s2);
-int		ft_itoa(char *str);
-int		digit_check(char *str);
-void	kill_root(t_root *root);
+void		write_state(t_philos *philo, int state);
+void		pick_up_forks(t_philos *philo);
+void		drop_forks(t_philos *philo);
 
-//				PARSING
-int	check_parsing(t_root *root, int argc, char **argv);
+void		kill_root(t_root *root);
+
 
 #endif

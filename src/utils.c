@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:37:09 by dioferre          #+#    #+#             */
-/*   Updated: 2025/03/28 12:12:00 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/28 17:54:26 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ size_t	get_time(void)
 		return (printf("Time error\n") ,-1);
 	return(time.tv_sec * 1000 + time.tv_usec / 1000);
 }
-
+/* Precise usleep for accuracy. */
 void	ft_usleep(size_t milliseconds)
 {
 	size_t start;
@@ -31,7 +31,20 @@ void	ft_usleep(size_t milliseconds)
 		usleep(100);
 }
 
-/* Simple atoi, doesnt handle negatives
+/* Checks if a string has ONLY digits,
+returns 0 if not, 1 if yes */
+int	digit_check(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+		if (!(str[i] >= '0' && str[i] <= '9'))
+			return(0);
+	return (1);
+}
+
+/* Simple itoa, doesnt handle negatives
 since it does not need to,
 don't even try it */
 int	ft_itoa(char *str)
@@ -70,10 +83,7 @@ void	write_state(t_philos *philo, int state)
 			printf("is thinking\n");
 	}
 	else if (state == DEAD)
-	{
-		printf("%zi %d ", get_time() - philo->table->start_time, philo->id);
-		printf("died\n");
-	}
+		printf("%zi %d died\n", get_time() - philo->table->start_time, philo->id);
 	pthread_mutex_unlock(philo->table->printex);
 	pthread_mutex_unlock(philo->table->death_flag_lock);
 }

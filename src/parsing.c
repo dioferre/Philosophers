@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 15:04:22 by dioferre          #+#    #+#             */
-/*   Updated: 2024/10/22 15:04:50 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/28 15:24:48 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,8 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-int	check_parsing(t_root *root, int argc, char **argv)
+int	check_parsing(int argc, char **argv)
 {
-	(void) root;
 	int	i;
 
 	i = 0;

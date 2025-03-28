@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:10:44 by dioferre          #+#    #+#             */
-/*   Updated: 2025/03/28 13:01:25 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/28 18:46:26 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ t_data	*init_data(int argc, char **argv)
 		data->nr_meals = ft_itoa(argv[5]);
 	else
 		data->nr_meals = -1;
-	printf("nr of philos: %d\ntime2die: %d\ntime2eat: %d\ntime2sleep: %d\nnr_meals: %d\n",
-		data->nr_philos, data->time2die, data->time2eat, data->time2sleep, data->nr_meals);
 	return (data);
 }
 
@@ -46,6 +44,8 @@ void	create_philo(t_table *table, t_philos *philo,
 	philo->meals_had = 0;
 	philo->start_time = 0;
 	philo->left_fork = &forks[i];
+	philo->meal_tex = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(philo->meal_tex, NULL);
 	if (i - 1 < 0)
 		philo->right_fork = &forks[table->data->nr_philos - 1];
 	else
@@ -59,10 +59,10 @@ t_table	*init_table(t_data *data)
 	t_table			*table;
 	int				i;
 
-	forks = malloc(data->nr_philos * (sizeof(pthread_mutex_t)));
-	philos = malloc(data->nr_philos * (sizeof(t_philos)));
 	table = malloc(sizeof(t_table));
 	table->printex = malloc(sizeof(pthread_mutex_t));
+	forks = malloc(data->nr_philos * (sizeof(pthread_mutex_t)));
+	philos = malloc(data->nr_philos * (sizeof(t_philos)));
 	table->data = data;
 	i = -1;
 	while (++i < data->nr_philos)
@@ -88,7 +88,9 @@ void	kill_root(t_root *root)
 	pthread_mutex_destroy(root->table->printex);
 	while (i < root->data->nr_philos)
 	{
+		pthread_mutex_destroy(root->table->philos[i].meal_tex);
 		pthread_mutex_destroy(root->table->philos[i].left_fork);
+		free(root->table->philos[i].meal_tex);
 		i++;
 	}
 	free(root->table->forks);
