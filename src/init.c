@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:10:44 by dioferre          #+#    #+#             */
-/*   Updated: 2025/03/25 19:57:29 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/28 09:41:51 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	create_philo(t_table *table, t_philos *philo,
 	philo->data = table->data;
 	philo->table = table;
 	philo->id = i;
-	philo->status = ALIVE;
 	philo->last_meal = 0;
 	philo->meals_had = 0;
 	philo->start_time = 0;
@@ -75,8 +74,9 @@ t_table	*init_table(t_data *data)
 		create_philo(table, &philos[i], forks, i);
 	table->forks = forks;
 	table->philos = philos;
-	table->death_flag = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(table->death_flag, NULL);
+	table->death_flag = FALSE;
+	table->death_flag_lock = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(table->death_flag_lock, NULL);
 	pthread_mutex_init(table->printex, NULL);
 	return (table);
 }
@@ -86,7 +86,7 @@ void	kill_root(t_root *root)
 	int	i;
 
 	i = 0;
-	pthread_mutex_destroy(root->table->death_flag);
+	pthread_mutex_destroy(root->table->death_flag_lock);
 	pthread_mutex_destroy(root->table->printex);
 	while (i < root->data->nr_philos)
 	{
@@ -98,7 +98,7 @@ void	kill_root(t_root *root)
 	free(root->table->forks);
 	free(root->table->philos);
 	free(root->table->printex);
-	free(root->table->death_flag);
+	free(root->table->death_flag_lock);
 	free(root->table);
 	free(root->data);
 	free(root);

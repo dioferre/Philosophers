@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 10:37:09 by dioferre          #+#    #+#             */
-/*   Updated: 2025/03/25 20:14:22 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/28 11:08:19 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ size_t	get_time(void)
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
-		return (printf("LOLOLOL\n") ,-1);
+		return (printf("Time error\n") ,-1);
 	return(time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
@@ -56,18 +56,24 @@ thinking, dead. */
 void	write_state(t_philos *philo, int state)
 {
 	pthread_mutex_lock(philo->table->printex);
-	pthread_mutex_lock(philo->table->death_flag);
-	printf("|%zi| Philosopher nr %d ", get_time() - philo->table->start_time, philo->id);
-	if (state == FORK_TAKEN)
-		printf("has taken a fork.\n");
-	else if (state == EATING)
-		printf("is eating.\n");
-	else if (state == SLEEPING)
-		printf("is sleeping.\n");
-	else if (state == THINKING)
-		printf("is thinking.\n");
+	pthread_mutex_lock(philo->table->death_flag_lock);
+	if (philo->table->death_flag == FALSE)
+	{
+		printf("%zi %d ", get_time() - philo->table->start_time, philo->id);
+		if (state == FORK_TAKEN)
+			printf("has taken a fork\n");
+		else if (state == EATING)
+			printf("is eating\n");
+		else if (state == SLEEPING)
+			printf("is sleeping\n");
+		else if (state == THINKING)
+			printf("is thinking\n");
+	}
 	else if (state == DEAD)
-		printf("died.\n");
+	{
+		printf("%zi %d ", get_time() - philo->table->start_time, philo->id);
+		printf("died\n");
+	}
 	pthread_mutex_unlock(philo->table->printex);
-	pthread_mutex_unlock(philo->table->death_flag);
+	pthread_mutex_unlock(philo->table->death_flag_lock);
 }

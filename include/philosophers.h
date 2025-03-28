@@ -28,29 +28,29 @@
 
 typedef struct s_philos
 {
-	int					id;
-	int					meals_had;
-	int					status;
-	size_t				start_time;
-	size_t				last_meal;
-	pthread_t			thread;
-	pthread_mutex_t		*statustex;
-	pthread_mutex_t		*left_fork;
-	pthread_mutex_t		*right_fork;
-	const struct s_data	*data;
-	const struct s_table	*table;
+	int						id;
+	int						meals_had;
+	size_t					start_time;
+	size_t					last_meal;
+	pthread_t				thread;
+	pthread_mutex_t			*statustex;
+	pthread_mutex_t			*left_fork;
+	pthread_mutex_t			*right_fork;
+	struct s_data		*data;
+	struct s_table	*table;
 }				t_philos;
 
 typedef struct s_table
 {
+	int					death_flag;
 	size_t				start_time;
 	t_philos			*philos;
 	pthread_t			thread;
 	pthread_mutex_t		*printex;
 	pthread_mutex_t		*forks;
-	pthread_mutex_t		*death_flag;
+	pthread_mutex_t		*death_flag_lock;
 	pthread_mutex_t		finished_eating;
-	const struct s_data	*data;
+	struct s_data	*data;
 }				t_table;
 
 typedef struct s_data
@@ -91,8 +91,8 @@ int	is_philosopher_dead(t_philos *philo);
 // =============== ROUTINE =================
 
 void	*routine(void *arg);
-int	eat(t_philos *philo);
-void	sleep_and_think(t_philos *philo);
+int		eat(t_philos *philo);
+int		sleep_and_think(t_philos *philo);
 
 //				UTIL FUNCS
 
@@ -101,6 +101,10 @@ t_data	*init_data(int argc, char **argv);
 t_table	*init_table(t_data *data);
 void	create_philo(t_table *table, t_philos *philo, pthread_mutex_t *forks, int i);
 void	kill_root(t_root *root);
+
+void	pick_up_forks(t_philos *philo);
+void	drop_forks(t_philos *philo);
+
 
 void	ft_usleep(size_t milliseconds);
 void	write_state(t_philos *philo, int state);
