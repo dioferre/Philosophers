@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 09:17:14 by dioferre          #+#    #+#             */
-/*   Updated: 2025/03/28 17:54:09 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/29 15:08:38 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,23 @@ void	kill_and_write_state(t_philos *philo)
 
 int	get_status(t_philos *philo)
 {
+	pthread_mutex_lock(philo->last_meal_lock);
 	if (philo->last_meal == 0)
 	{
-		if (get_time() - philo->table->start_time > (size_t) philo->data->time2die)
-			return (kill_and_write_state(philo), DEAD);
+		if (get_time() - philo->table->start_time
+			> (size_t) philo->data->time2die)
+			return (pthread_mutex_unlock(philo->last_meal_lock),
+				kill_and_write_state(philo), DEAD);
+		pthread_mutex_unlock(philo->last_meal_lock);
 	}
 	else if (get_time() - philo->last_meal > (size_t) philo->data->time2die)
 	{
-		return (kill_and_write_state(philo), DEAD);
+		return (pthread_mutex_unlock(philo->last_meal_lock),
+			kill_and_write_state(philo), DEAD);
+		pthread_mutex_unlock(philo->last_meal_lock);
 	}
+	else
+		pthread_mutex_unlock(philo->last_meal_lock);
 	return (ALIVE);
 }
 

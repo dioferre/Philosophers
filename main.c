@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 11:52:20 by dioferre          #+#    #+#             */
-/*   Updated: 2025/03/28 18:41:52 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/29 14:51:29 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int argc, char **argv)
 
 	root = malloc(sizeof(t_root));
 	if (check_parsing(argc, argv) != 0)
-		return(write(2, "ERROR: Invalid Input\n", 22), free(root), -1);
+		return (write(2, "ERROR: Invalid Input\n", 22), free(root), -1);
 	setup_root(&root, argc, argv);
 	start_meal(root->table, root->table->philos);
 	kill_root(root);

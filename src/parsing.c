@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 15:04:22 by dioferre          #+#    #+#             */
-/*   Updated: 2025/03/28 15:24:48 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/29 15:12:21 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,11 +47,14 @@ int	check_parsing(int argc, char **argv)
 	{
 		if (!argv[i] || !argv[i][0])
 			return (-2);
-		else if(!digit_check(argv[i]))
+		else if (!digit_check(argv[i]))
 			return (-3);
 		else if (ft_strlen(argv[i]) > 10
-				|| ((ft_strlen(argv[i]) == 10) && (ft_strncmp(argv[i], "2147483647", 10) > 0)))
+			|| ((ft_strlen(argv[i]) == 10)
+				&& (ft_strncmp(argv[i], "2147483647", 10) > 0)))
 			return (-4);
+		else if (argv[i][0] == '0' && i < 5)
+			return (-5);
 	}
 	return (0);
 }

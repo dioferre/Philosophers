@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philosophers.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/29 15:10:13 by dioferre          #+#    #+#             */
+/*   Updated: 2025/03/29 15:10:47 by dioferre         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILOSOPHERS_H
 # define PHILOSOPHERS_H
 
@@ -10,20 +22,19 @@
 
 /* ============ |DEFINES| ============ */
 
-#define FALSE 0
-#define TRUE 1
+# define FALSE 0
+# define TRUE 1
 
-#define MAX_PHILOS 200
+# define MAX_PHILOS 200
 
 // Philosopher states
 
-#define DEAD 0
-#define ALIVE 1
-#define FORK_TAKEN 5
-#define EATING 6
-#define SLEEPING 7
-#define THINKING 8
-
+# define DEAD 0
+# define ALIVE 1
+# define FORK_TAKEN 5
+# define EATING 6
+# define SLEEPING 7
+# define THINKING 8
 
 /* ============ |STRUCTS| ============ */
 
@@ -34,7 +45,8 @@ typedef struct s_philos
 	size_t					start_time;
 	size_t					last_meal;
 	pthread_t				thread;
-	pthread_mutex_t			*meal_tex;
+	pthread_mutex_t			*last_meal_lock;
+	pthread_mutex_t			*meal_lock;
 	pthread_mutex_t			*left_fork;
 	pthread_mutex_t			*right_fork;
 	const struct s_data		*data;
@@ -70,7 +82,6 @@ typedef struct s_root
 
 /* ============= |FUNCTIONS| ============= */
 
-
 // ============== SETUP =================
 
 int			check_parsing(int argc, char **argv);
@@ -82,7 +93,6 @@ void		create_philo(t_table *table, t_philos *philo,
 t_data		*init_data(int argc, char **argv);
 t_table		*init_table(t_data *data);
 
-
 // ============== ROUTINE =================
 
 int			start_meal(t_table *table, t_philos *philos);
@@ -91,14 +101,12 @@ int			eat(t_philos *philo);
 int			philo_sleep(t_philos *philo);
 void		*routine(void *arg);
 
-
 // ============= MONITORING ===============
 
 void		*monitor(void *arg);
 int			check_death_flag(t_philos *philo);
 int			get_status(t_philos *philo);
 void		kill_and_write_state(t_philos *philo);
-
 
 // ============== UTILS =================
 
@@ -114,6 +122,5 @@ void		pick_up_forks(t_philos *philo);
 void		drop_forks(t_philos *philo);
 
 void		kill_root(t_root *root);
-
 
 #endif

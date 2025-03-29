@@ -6,7 +6,7 @@
 /*   By: dioferre <dioferre@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 12:10:44 by dioferre          #+#    #+#             */
-/*   Updated: 2025/03/28 18:46:26 by dioferre         ###   ########.fr       */
+/*   Updated: 2025/03/29 15:04:31 by dioferre         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,15 @@ void	create_philo(t_table *table, t_philos *philo,
 {
 	philo->data = table->data;
 	philo->table = table;
-	philo->id = i;
+	philo->id = i + 1;
 	philo->last_meal = 0;
 	philo->meals_had = 0;
 	philo->start_time = 0;
 	philo->left_fork = &forks[i];
-	philo->meal_tex = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(philo->meal_tex, NULL);
+	philo->meal_lock = malloc(sizeof(pthread_mutex_t));
+	philo->last_meal_lock = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(philo->meal_lock, NULL);
+	pthread_mutex_init(philo->last_meal_lock, NULL);
 	if (i - 1 < 0)
 		philo->right_fork = &forks[table->data->nr_philos - 1];
 	else
@@ -88,9 +90,11 @@ void	kill_root(t_root *root)
 	pthread_mutex_destroy(root->table->printex);
 	while (i < root->data->nr_philos)
 	{
-		pthread_mutex_destroy(root->table->philos[i].meal_tex);
+		pthread_mutex_destroy(root->table->philos[i].meal_lock);
+		pthread_mutex_destroy(root->table->philos[i].last_meal_lock);
 		pthread_mutex_destroy(root->table->philos[i].left_fork);
-		free(root->table->philos[i].meal_tex);
+		free(root->table->philos[i].meal_lock);
+		free(root->table->philos[i].last_meal_lock);
 		i++;
 	}
 	free(root->table->forks);

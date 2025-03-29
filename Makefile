@@ -2,7 +2,7 @@ CC = cc
 NAME = philo
 
 #FLAGS
-CFLAGS = -g -Wall -Wextra -Werror -I$(INC_DIR)
+CFLAGS = -g -fsanitize=thread -Wall -Wextra -Werror -I$(INC_DIR)
 
 # Color variables
 RED = \033[0;31m
