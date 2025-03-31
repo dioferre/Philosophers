@@ -1,10 +1,13 @@
 # Philosophers
 
 ![Philosophers](https://images.theconversation.com/files/257265/original/file-20190205-86202-19tymqj.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=926&fit=clip)
+
 ## 📝 Overview
+
 The *Philosophers* project is part of the 42 curriculum and is based on the **Dining Philosophers Problem**, a classic synchronization problem in computer science. The goal is to manage multiple philosophers who alternate between **thinking**, **eating**, and **sleeping**, while ensuring that they do not encounter deadlocks or resource starvation.
 
 ## 🚀 Features
+
 - Implemented using **threads and mutexes**.
 - Ensures proper **synchronization** to avoid deadlocks.
 - Supports **multiple philosophers** with customizable simulation parameters.
@@ -12,6 +15,7 @@ The *Philosophers* project is part of the 42 curriculum and is based on the **Di
 - Precise **time management** using `gettimeofday()`.
 
 ## 🛠️ Installation
+
 To compile the project, simply run:
 
 ```bash
@@ -21,6 +25,7 @@ make
 This will generate the `philo` executable.
 
 ## 📌 Usage
+
 Run the program with the following parameters:
 
 ```bash
@@ -28,16 +33,20 @@ Run the program with the following parameters:
 ```
 
 ### Example:
+
 ```bash
 ./philo 5 800 200 200
 ```
+
 This runs the simulation with:
+
 - **5 philosophers**
 - **800ms** before dying if they don’t eat
 - **200ms** to eat
 - **200ms** to sleep
 
 ## 🖥️ Output Example
+
 ```
 0 1 is thinking
 100 2 is eating
@@ -47,11 +56,13 @@ This runs the simulation with:
 ```
 
 ## ⚠️ Handling Edge Cases
+
 - Prevents deadlocks by **avoiding simultaneous fork grabbing**.
 - Handles **single philosopher case** correctly.
 - Properly cleans up **threads and mutexes** to prevent memory leaks.
 
 ## 🏛️ Project Structure
+
 ```
 📂 philosophers
  ├── include
@@ -69,15 +80,22 @@ This runs the simulation with:
 ```
 
 ## 📚 Learning Outcomes
+
 - **Multithreading** with `pthread`
 - **Mutex synchronization**
 - **Concurrency control**
 - **Timing and precision in C**
 
 ## 📖 References
+
 - [Dining Philosophers Problem - Wikipedia](https://en.wikipedia.org/wiki/Dining_philosophers_problem)
 - [pthread Library Documentation](https://man7.org/linux/man-pages/man7/pthreads.7.html)
-- [image used at the top](https://theconversation.com/3-philosophers-set-up-a-booth-on-a-street-corner-heres-what-people-asked-110866)
-- Special thanks to [Markos](https://github.com/MarkosComK) and [Edu](https://github.com/eduVVSC) for their help during this project.
+- [Image used at the top](https://theconversation.com/3-philosophers-set-up-a-booth-on-a-street-corner-heres-what-people-asked-110866)
+
+## 🎉 Acknowledgements
+
+Special thanks to [Markos](https://github.com/MarkosComK) and [Edu](https://github.com/eduVVSC) for their help during this project.
+
 ---
 ⭐ If you found this project interesting, give it a **star** on GitHub! ⭐
+
